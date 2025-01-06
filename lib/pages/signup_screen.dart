@@ -1,26 +1,25 @@
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
-import 'package:ecofy/pages/login_screen.dart';
 import 'package:ecofy/services/general/localstorage.dart';
-import 'package:ecofy/services/general/main_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:ecofy/components/button.dart';
-import 'package:ecofy/components/mytextfield.dart';
-import 'package:ecofy/services/general/colors.dart';
 import 'package:ecofy/services/general/snackbar.dart';
+import 'package:ecofy/pages/login_screen.dart';
+import 'package:ecofy/services/general/colors.dart';
+import 'package:ecofy/services/general/main_navigation.dart';
 
 class SignUpScreen extends StatefulWidget {
   final DatabaseService database;
   final double height;
   final double width;
-  const SignUpScreen(
-      {super.key,
-      required this.database,
-      required this.height,
-      required this.width});
+
+  const SignUpScreen({
+    super.key,
+    required this.database,
+    required this.height,
+    required this.width,
+  });
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -44,7 +43,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void signUp() async {
     await dotenv.load();
-
     apiUrl = dotenv.env["httpURL"];
 
     if (pwdController.text != confirmPwdController.text) {
@@ -54,34 +52,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return;
     }
 
-    // Create the request body with default bio
     final requestBody = {
       "email": emailController.text,
       "pwd": pwdController.text,
-      "username": usernameController.text
-      /*
-      "bio": "This is my bio!", // Default bio
-      "followers": 0, // Default value for new user
-      "following": 0, // Default value for new user
-      "uploadedPhotos": [] // Default empty array*/
-
-      // Added on server side
+      "username": usernameController.text,
     };
 
     try {
-      // Make the HTTP request
       var response = await http.post(
         Uri.parse("$apiUrl/recyclingSignUp"),
         body: jsonEncode(requestBody),
         headers: {
-          "Content-Type": "application/json", // Set content type as JSON
+          "Content-Type": "application/json",
         },
       );
 
       if (mounted) {
         final responseData = jsonDecode(response.body);
-        //print("Signup response: ${responseData["user"]}"); // Debug the response
-
         showSnackbar(
           context,
           responseData['msg'],
@@ -90,22 +77,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
         if (response.statusCode == 200) {
           widget.database.replace(responseData["user"]).then((data) {
-            //Saving data from response to SQLite table
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => MainNavigation(
-                      database: widget.database,
-                      userId: responseData["user"]["userId"],
-                      width: widget.width,
-                      height: widget.height)),
+                builder: (context) => MainNavigation(
+                  database: widget.database,
+                  userId: responseData["user"]["userId"],
+                  width: widget.width,
+                  height: widget.height,
+                ),
+              ),
             );
           });
         }
       }
     } catch (error) {
       if (mounted) {
-        print("Signup error: $error"); // Debug error
+        print("Signup error: $error");
         showSnackbar(context, "An error occurred. Please try again.", true);
       }
     }
@@ -118,7 +106,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         title: const Text('Sign Up'),
         backgroundColor: appBarColor,
       ),
-      backgroundColor: backgroundColor,
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
@@ -127,37 +115,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: widget.height * 0.06),
+                  SizedBox(height: widget.height * 0.05),
                   Icon(
                     Icons.recycling_sharp,
-                    size: widget.height * 0.09,
-                    color: logoColor,
-                  ),
-                  SizedBox(height: widget.height * 0.06),
-                  const Text(
-                    "Let's create your account",
-                    style: TextStyle(fontSize: 16),
+                    size: widget.height * 0.15,
+                    color: Colors.green,
                   ),
                   SizedBox(height: widget.height * 0.03),
-                  MyTextField(
+                  const Text(
+                    "Create Account",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                    ),
+                  ),
+                  SizedBox(height: widget.height * 0.02),
+                  _buildTextField(
                     controller: usernameController,
                     hintText: "Username",
+                    icon: Icons.person,
                   ),
-                  SizedBox(height: widget.height * 0.01),
-                  MyTextField(
+                  SizedBox(height: widget.height * 0.02),
+                  _buildTextField(
                     controller: emailController,
                     hintText: "Email",
+                    icon: Icons.email,
                   ),
-                  SizedBox(height: widget.height * 0.01),
-                  MyTextField(
+                  SizedBox(height: widget.height * 0.02),
+                  _buildTextField(
                     controller: pwdController,
                     hintText: "Password",
+                    icon: Icons.lock,
                     obscureText: true,
                   ),
-                  SizedBox(height: widget.height * 0.01),
-                  MyTextField(
+                  SizedBox(height: widget.height * 0.02),
+                  _buildTextField(
                     controller: confirmPwdController,
                     hintText: "Confirm Password",
+                    icon: Icons.lock_outline,
                     obscureText: true,
                   ),
                   SizedBox(height: widget.height * 0.03),
@@ -165,27 +161,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     onTap: signUp,
                     text: "Sign Up",
                   ),
-                  SizedBox(height: widget.height * 0.06),
+                  SizedBox(height: widget.height * 0.03),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Already have an account?"),
-                      SizedBox(width: widget.height * 0.005),
+                      const Text("Have an account?"),
                       GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => LoginScreen(
-                                  database: widget.database,
-                                  height: widget.height,
-                                  width: widget.width),
+                                database: widget.database,
+                                height: widget.height,
+                                width: widget.width,
+                              ),
                             ),
                           );
                         },
                         child: const Text(
-                          'Login now',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          " Sign in",
+                          style: TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
@@ -194,6 +193,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String hintText,
+    required IconData icon,
+    bool obscureText = false,
+  }) {
+    return TextField(
+      controller: controller,
+      obscureText: obscureText,
+      decoration: InputDecoration(
+        prefixIcon: Icon(icon, color: Colors.green),
+        hintText: hintText,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.green, width: 2),
         ),
       ),
     );

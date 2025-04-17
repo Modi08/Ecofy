@@ -104,10 +104,6 @@ class _MainNavigationState extends State<MainNavigation> {
       });
       listendMsg(socket!, widget.database, widget.userId);
     });
-    FlutterBackgroundService().startService().then((data) {
-      debugPrint("Serviec started $data");
-      FlutterBackgroundService().invoke("setAsForeground");
-    });
   }
 
   @override

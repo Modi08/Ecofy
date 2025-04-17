@@ -1,4 +1,3 @@
-import 'package:ecofy/services/general/background.dart';
 import 'package:ecofy/services/general/localstorage.dart';
 import 'package:flutter/material.dart';
 import 'package:ecofy/pages/welcome_screen.dart'; // Replace your_app_name with the actual app name
@@ -6,10 +5,6 @@ import 'pages/signup_screen.dart'; // Import SignUpScreen
 import 'pages/login_screen.dart'; // Import LoginScreen
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await initializeService();
-
   runApp(const Ecofy());
 }
 
@@ -34,7 +29,7 @@ class _EcofyState extends State<Ecofy> {
     double height = MediaQuery.of(context).size.height;
 
     return MaterialApp(
-      title: 'Recycling App',
+      title: 'Ecofy',
       theme: ThemeData(primarySwatch: Colors.green),
       initialRoute: '/',
       routes: {

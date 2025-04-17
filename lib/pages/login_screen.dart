@@ -63,8 +63,8 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (error) {
       if (mounted) {
-        print("Error occurred during login: $error");
-        showSnackbar(context, "An error occurred. Please try again.", true);
+        debugPrint("Error occurred during login: $error");
+        showSnackbar(context, "An error occurred. Please try again. $error", true, 100);
       }
     }
   }

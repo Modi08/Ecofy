@@ -55,5 +55,7 @@
 		<array>
 			<string>dev.flutter.background.refresh</string>
 		</array>
+		<key>NSAllowsArbitraryLoads</key>
+    	<true/>
 	</dict>
 </plist>

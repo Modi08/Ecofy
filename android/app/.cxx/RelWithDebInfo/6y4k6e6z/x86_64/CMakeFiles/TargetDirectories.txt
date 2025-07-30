@@ -1,0 +1,2 @@
+C:/Users/sande/OneDrive/schoolwork/App/Flutter/Ecofy/android/app/.cxx/RelWithDebInfo/6y4k6e6z/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/sande/OneDrive/schoolwork/App/Flutter/Ecofy/android/app/.cxx/RelWithDebInfo/6y4k6e6z/x86_64/CMakeFiles/rebuild_cache.dir

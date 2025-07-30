@@ -50,7 +50,7 @@
 		<key>NSMicrophoneUsageDescription</key>
 		<string>MicroPhone Usage</string>
 		<key>NSPhotoLibraryUsageDescription</key>
-		<string>Photo Usage</string>
+		<string>Needs access to photo library to be able to upload photos to the app for logging recycling</string>
 		<key>BGTaskSchedulerPermittedIdentifiers</key>
 		<array>
 			<string>dev.flutter.background.refresh</string>

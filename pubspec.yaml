@@ -36,6 +36,7 @@ dependencies:
   web_socket_channel: ^3.0.1
   flutter_dotenv: ^5.1.0
   sqflite: ^2.3.3
+  shared_preferences: ^2.0.9
   image_picker: ^1.1.2
   aws_s3_upload_lite: ^0.1.4
   path: ^1.8.3

@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ecofy/services/general/localstorage.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class Leaderboard extends StatefulWidget {
   final double height;
   final double width;
+  final String userId;
+  final WebSocketChannel socket;
   final DatabaseService database;
 
   const Leaderboard({
@@ -11,6 +16,8 @@ class Leaderboard extends StatefulWidget {
     required this.height,
     required this.width,
     required this.database,
+    required this.userId,
+    required this.socket,
   });
 
   @override
@@ -28,8 +35,13 @@ class _LeaderboardState extends State<Leaderboard> {
       mutableUsers.sort((a, b) => (b['countUploadedPhotos'] ?? 0)
           .compareTo(a['countUploadedPhotos'] ?? 0));
       setState(() {
-        topPlayers = mutableUsers.take(10).toList();
-        isLoading = false;
+        if (mutableUsers.length == 1) {
+          topPlayers = [];
+          isLoading = true;
+        } else {
+          topPlayers = mutableUsers.take(10).toList();
+          isLoading = false;
+        }
       });
     } catch (error) {
       debugPrint("Error loading leaderboard data: $error");
@@ -42,11 +54,14 @@ class _LeaderboardState extends State<Leaderboard> {
   @override
   void initState() {
     super.initState();
+    widget.socket.sink
+        .add(jsonEncode({"action": "getAllUsers", "userId": widget.userId}));
     loadLeaderboardData();
   }
 
   @override
   Widget build(BuildContext context) {
+    loadLeaderboardData();
     return Scaffold(
       body: isLoading
           ? const Center(child: CircularProgressIndicator())

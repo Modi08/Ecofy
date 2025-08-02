@@ -41,6 +41,7 @@ void listendMsg(
 void processMsg(int statusCode, Map<String, dynamic> data,
     WebSocketChannel socket, DatabaseService database, String userId) {
   developer.log("Processing message", name: 'WebSocket', error: statusCode);
+  print(statusCode);
   switch (statusCode) {
     case 100: // No Return Value
       break;

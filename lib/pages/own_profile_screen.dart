@@ -1,6 +1,7 @@
 import 'package:ecofy/components/avatar_circle.dart';
 import 'package:ecofy/services/general/image_upload.dart';
 import 'package:ecofy/services/general/localstorage.dart';
+import 'package:ecofy/services/general/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:ecofy/pages/settings_screen.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -196,24 +197,37 @@ class _OwnProfileScreenState extends State<OwnProfileScreen> {
           Expanded(
             child: ElevatedButton(
               onPressed: () {
-                // Navigate to the settings screen
-                /*Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SettingsScreen(
-                            database: widget.database,
-                            refreshData: widget.refreshData,
-                            userId: widget.userId,
-                            socket: widget.socket,
-                          )),
-                );*/
-                selectImage(widget.userId, widget.database, widget.socket,
-                        isProfilePic: false,
-                        count: widget.userData["countUploadedPhotos"] + 1)
-                    .then((data) {
-                  //print("Count: $data");
-                  widget.refreshData();
-                  //print("UserData ${widget.userData}");
+                readDataFromLocalStorage("imagesUploadedToday").then((data) {
+                  int count = 0;
+                  int month = -1;
+                  int day = -1;
+                  if (data != null) {
+                    count = int.parse(data.split("|")[1]);
+                    month = int.parse(data.split("|")[0].split(":")[1]);
+                    day = int.parse(data.split("|")[0].split(":")[0]);
+                  }
+
+                  if (count <= 10 &&
+                      (DateTime.now().month == month ||
+                          DateTime.now().day == day)) {
+                    showSnackbar(
+                        context,
+                        "You have reached the limit of 10 uploads today.",
+                        true);
+                    return;
+                  } else {
+                    selectImage(widget.userId, widget.database, widget.socket,
+                            isProfilePic: false,
+                            count: widget.userData["countUploadedPhotos"] + 1)
+                        .then((data) {
+                      //print("Count: $data");
+                      widget.refreshData();
+                      //print("UserData ${widget.userData}");
+                    });
+                    saveDataToLocalStorage("imagesUploadedToday", 
+                        "${DateTime.now().day}:${DateTime.now().month}|${count + 1}");
+                    return;
+                  }
                 });
               },
               style: ElevatedButton.styleFrom(

@@ -55,6 +55,8 @@ class _MainNavigationState extends State<MainNavigation> {
             width: widget.width,
             height: widget.height,
             database: widget.database, // Pass the database reference here
+            userId: widget.userId,
+            socket: socket!,
           );
         case 2:
           return socket != null

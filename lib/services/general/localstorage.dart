@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:developer' as developer;
 
 class User {
@@ -150,6 +151,12 @@ class DatabaseService {
   }
 
   // Clear all rows in the database
+  Future<int> clearAll() async {
+    Database db = await database;
+    return await db.delete(tableName);
+  }
+  
+  // Clear all rows in the database Except for the specified userId
   Future<int> clearAllExecpt(String userId) async {
     Database db = await database;
     return await db
@@ -188,4 +195,21 @@ class DatabaseService {
       return results;
     }
   }
+}
+
+
+
+Future<String?> readDataFromLocalStorage(String key) async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString(key);
+}
+
+Future<void> saveDataToLocalStorage(String key, String value) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString(key, value);
+}
+
+Future<void> clearDataFromLocalStorage(String key) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.clear();
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ecofy/pages/login_screen.dart';
 import 'package:ecofy/services/general/image_upload.dart';
 import 'package:ecofy/services/general/localstorage.dart';
 import 'package:flutter/material.dart';
@@ -136,6 +137,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: "About",
                   onTap: () {
                     _showAboutDialog(context);
+                  },
+                ),
+                _buildSettingsCategory(
+                  context,
+                  icon: Icons.delete_forever,
+                  title: "Delete Account",
+                  onTap: () {
+                    widget.socket.sink.add(jsonEncode({
+                      "action": "deleteUser",
+                      "userId": widget.userId,
+                    }));
+                    
+                    widget.database.clearAll().then((data) {
+                      widget.refreshData();
+                    });
+
+                    widget.socket.sink.close();
+                    
+                    Navigator.pop(context);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LoginScreen(
+                            database: widget.database,
+                            height: widget.height,
+                            width: widget.width),
+                      ),
+                    );
                   },
                 ),
               ],

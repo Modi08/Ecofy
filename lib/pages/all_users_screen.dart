@@ -71,6 +71,7 @@ class _AllUsersScreenState extends State<AllUsersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    loadUserData();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

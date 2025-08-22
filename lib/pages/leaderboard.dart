@@ -76,7 +76,7 @@ class _LeaderboardState extends State<Leaderboard> {
 
   Widget _buildHeader() {
     return Container(
-      height: widget.height * 0.41,
+      height: widget.height * 0.45,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [Color(0xFF37BE81), Color.fromARGB(255, 13, 66, 42)],

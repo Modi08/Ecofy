@@ -29,6 +29,7 @@ class _EcofyState extends State<Ecofy> {
     double height = MediaQuery.of(context).size.height;
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Ecofy',
       theme: ThemeData(primarySwatch: Colors.green),
       initialRoute: '/',

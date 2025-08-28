@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:ecofy/pages/introduction_screen.dart';
 import 'package:ecofy/services/general/localstorage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -78,16 +79,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
         if (response.statusCode == 200) {
           widget.database.replace(responseData["user"]).then((data) {
             Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MainNavigation(
-                  database: widget.database,
-                  userId: responseData["user"]["userId"],
-                  width: widget.width,
-                  height: widget.height,
-                ),
-              ),
-            );
+                context,
+                MaterialPageRoute(
+                  builder: (context) => IntroductionScreen(
+                    database: widget.database,
+                    userId: responseData["user"]["userId"],
+                    width: widget.width,
+                    height: widget.height,
+                  ),
+                ));
           });
         }
       }

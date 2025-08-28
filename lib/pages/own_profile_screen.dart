@@ -207,7 +207,7 @@ class _OwnProfileScreenState extends State<OwnProfileScreen> {
                     day = int.parse(data.split("|")[0].split(":")[0]);
                   }
 
-                  if (count <= 10 &&
+                  if (count >= 10 &&
                       (DateTime.now().month == month ||
                           DateTime.now().day == day)) {
                     showSnackbar(

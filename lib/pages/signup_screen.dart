@@ -8,7 +8,6 @@ import 'package:ecofy/components/button.dart';
 import 'package:ecofy/services/general/snackbar.dart';
 import 'package:ecofy/pages/login_screen.dart';
 import 'package:ecofy/services/general/colors.dart';
-import 'package:ecofy/services/general/main_navigation.dart';
 
 class SignUpScreen extends StatefulWidget {
   final DatabaseService database;

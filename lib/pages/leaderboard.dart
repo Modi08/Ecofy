@@ -62,7 +62,7 @@ class _LeaderboardState extends State<Leaderboard> {
   @override
   Widget build(BuildContext context) {
     loadLeaderboardData();
-    debugPrint(isLoading.toString());
+    //debugPrint(isLoading.toString());
     return Scaffold(
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
